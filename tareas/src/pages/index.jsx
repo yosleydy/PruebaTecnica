@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React,{useState} from "react";
 import Eliminar from "../assets/iconos/Icono_Eliminar.svg";
 import Icono_PorHacer from "../assets/iconos/Icono_PorHacer.png";
 import finalizada from "../assets/iconos/finalizada.png";
@@ -10,7 +10,6 @@ export default function Index() {
         persona: "",
       });
     const [activity, setActivity] = useState([]);
-    const [count, setCount] = useState(0);
 
     const handleFormChange = (event) => {
         const { name, value } = event.target;
@@ -35,32 +34,21 @@ export default function Index() {
         });
     }
 
-    const handleOnclickDelete = (item) => {
-        let array = activity.filter((data) => data.act !== item);
+    const handleOnclickDelete = (id) => {
+        let array = activity.filter((data,index) => index !== id);
         setActivity(array)
       };
 
 
-      const handleOnclickAction = (item) => {
-        let array = activity
-        array.forEach(function(datos){
-            if(datos.act === item){
-                if(datos.estado === 1){
-                    datos.estado = 0
-                }else{
-                    datos.estado = 1
-                }
-            }
-          })
-        setActivity(array)
-        console.log(count)
-        setCount(count+1)
+      const handleOnclickAction = (id) => {
+       const nextCounters = activity.map((c, i) => {
+          if (i === id) {
+            c.estado === 1 ? c.estado = 0 : c.estado = 1;
+            return c;
+          }else{ return c;}
+        });
+        setActivity(nextCounters)
       };
-
-
-      useEffect(() => {
-        console.log(activity)
-      }, [count]);
 
     return (
         <>
@@ -97,19 +85,19 @@ export default function Index() {
             </form>
         </div>
 
-        <div className="flex items-center justify-center pt-10">
+        <div className="w-full flex justify-center pt-10 pb-4">
         <ul>
         {activity.map((item, key) => (
-           <li key={key}>
-            <div className="flex items-center justify-center grid grid-cols-3 gap-1">
-                <div><button onClick={()=>handleOnclickAction(item.act)} type={"button"}>
+           <li key={key} className="pt-3">
+            <div className="flex items-center justify-center grid-inline grid-cols-3">
+                <div className="flex items-center justify-start w-1/4"><button onClick={()=>handleOnclickAction(key)} type={"button"}>
                 <img src={item.estado === 0 ? Icono_PorHacer :   finalizada } alt="" className="w-5"/></button>
                 </div>
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-start  w-3/4">
                     {item.act}
                 </div>
-                <div>
-                    <button onClick={()=>handleOnclickDelete(item.act,key)} type={"button"}>
+                <div className="flex items-center justify-start w-1/4">
+                    <button onClick={()=>handleOnclickDelete(key)} type={"button"}>
                     <img src={Eliminar} alt="" /></button>
                 </div>
             </div>
