@@ -10,7 +10,7 @@ export default function Index() {
         persona: "",
       });
     const [activity, setActivity] = useState([]);
-
+    const [count, setCount] = useState(0);
 
     const handleFormChange = (event) => {
         const { name, value } = event.target;
@@ -53,12 +53,14 @@ export default function Index() {
             }
           })
         setActivity(array)
+        console.log(count)
+        setCount(count+1)
       };
 
 
       useEffect(() => {
         console.log(activity)
-      }, [activity,setActivity]);
+      }, [count]);
 
     return (
         <>
